@@ -43,6 +43,9 @@ class Request
         }
         throw new Error('Accessing a non-existent property');
     }
-
+    public function __isset($key)
+    {
+        return array_key_exists($key, $this->body);
+    }
 
 }

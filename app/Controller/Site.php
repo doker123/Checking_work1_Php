@@ -12,7 +12,7 @@ class Site
 {
     public function index(Request $request): string
     {
-        $posts = Post::where('id', $request->id)->get();
+        $posts = isset($request->id)? Post::where('id', '=', $request->id)->get(): Post::all();
         return (new View())->render('site.post', ['posts' => $posts]);
     }
     public function hello(): string
@@ -23,6 +23,7 @@ class Site
     {
         if ($request->method==='POST' && User::create($request->all())){
             app()->route->redirect('/go');
+            return '';
         }
         return new View('site.signup');
     }

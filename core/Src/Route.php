@@ -21,6 +21,7 @@ class Route
     public static function add($httpMethod, string $route, array $action) :self
     {
         self::single()->routeCollector->addRoute($httpMethod, $route, $action);
+        self::single()->currentHttpMethod = $httpMethod;
         self::single()->currentRoute =$route;
         return self::single();
     }

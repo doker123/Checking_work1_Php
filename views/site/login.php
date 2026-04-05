@@ -3,7 +3,7 @@
 
 <h3><?= app()->auth->user()->name ?? ''; ?></h3>
 <?php
-if (!app()->auth::check()):
+if (!app()->auth->check()):
     ?>
     <form method="post">
         <label>Логин <input type="text" name="login"></label>

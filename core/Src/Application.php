@@ -23,7 +23,7 @@ class Application
         $this->auth = new $this->settings->app['auth'];
 
         $this->dbRun();
-        $this->auth::init(new $this-> settings->app['indentity']);
+        $this->auth::init(new $this->settings->app['identity']);
 
     }
 
