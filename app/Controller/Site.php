@@ -12,7 +12,7 @@ class Site
 {
     public function index(Request $request): string
     {
-        $posts = isset($request->id)? Post::where('id', '=', $request->id)->get(): Post::all();
+        $posts = !empty($request->id) ? Post::where('id', '=', $request->id)->get() : Post::all();
         return (new View())->render('site.post', ['posts' => $posts]);
     }
     public function hello(): string
@@ -40,7 +40,8 @@ class Site
     public function logout(): void
     {
         Auth::logout();
-        app()->route->redirect('/hello');
+        app()->route->redirect('/go');
+        exit;
     }
 
 }

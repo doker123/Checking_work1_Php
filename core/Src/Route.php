@@ -13,23 +13,26 @@ use Src\Traits\SingletonTrait;
 class Route
 {
     use SingletonTrait;
+
     private string $currentRoute = '';
     private $currentHttpMethod;
     private string $prefix = '';
     private RouteCollector $routeCollector;
 
-    public static function add($httpMethod, string $route, array $action) :self
+    public static function add($httpMethod, string $route, array $action): self
     {
         self::single()->routeCollector->addRoute($httpMethod, $route, $action);
         self::single()->currentHttpMethod = $httpMethod;
-        self::single()->currentRoute =$route;
+        self::single()->currentRoute = $route;
         return self::single();
     }
-    public static function group(string $prefix, callable $callback) :void
+
+    public static function group(string $prefix, callable $callback): void
     {
-     self::single()->routeCollector->addGroup($prefix, $callback);
-     Middleware::single()->group($prefix, $callback);
+        self::single()->routeCollector->addGroup($prefix, $callback);
+        Middleware::single()->group($prefix, $callback);
     }
+
     private function __construct()
     {
         $this->routeCollector = new RouteCollector(new Std(), new MarkBased());
@@ -70,7 +73,14 @@ class Route
             $uri = substr($uri, 0, $pos);
         }
         $uri = rawurldecode($uri);
-        $uri = substr($uri, strlen($this->prefix));
+
+        $prefix = $this->prefix;
+        $uri = substr($uri, strlen($prefix));
+        $uri = preg_replace('#^/public/#', '/', $uri);
+        $uri = rtrim($uri, '/');
+        if (empty($uri)) {
+            $uri = '/';
+        }
 
         $dispatcher = new Dispatcher($this->routeCollector->getData());
 
