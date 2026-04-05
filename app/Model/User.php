@@ -1,4 +1,5 @@
 <?php
+
 namespace Model;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -28,14 +29,16 @@ class User extends Model implements IdentityInterface
 
     public function attemptIdentity(array $credentials)
     {
-        return self::where(['login' => $credentials['login'], 'password' => md5($credentials['password'])])->first();
+        return self::where('login', $credentials['login'])
+            ->where('password', $credentials['password'])
+            ->first();
     }
 
     protected static function booted()
     {
-        static::created(function ($user) {
+        static::creating(function ($user) {
             $user->password = md5($user->password);
-            $user->save();
+
         });
     }
 }

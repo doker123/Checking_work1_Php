@@ -40,7 +40,8 @@ class Site
     public function logout(): void
     {
         Auth::logout();
-        app()->route->redirect('/hello');
+        app()->route->redirect('/go');
+        exit;
     }
 
 }
