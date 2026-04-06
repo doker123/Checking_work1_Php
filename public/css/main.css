@@ -11,7 +11,7 @@ body {
     min-height: 100vh;
 }
 
-header {
+.header {
     background-color: #2c6fb3;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     position: sticky;
@@ -19,7 +19,7 @@ header {
     z-index: 100;
 }
 
-nav {
+.header-nav {
     max-width: 1200px;
     margin: 0 auto;
     padding: 1rem 2rem;
@@ -28,7 +28,7 @@ nav {
     align-items: center;
 }
 
-nav a {
+.header-nav a {
     color: #ffffff;
     text-decoration: none;
     padding: 0.5rem 1rem;
@@ -37,12 +37,12 @@ nav a {
     font-weight: 500;
 }
 
-nav a:hover {
+.header-nav a:hover {
     background-color: #1a4a7a;
     transform: translateY(-2px);
 }
 
-nav a:active {
+.header-nav a:active {
     transform: translateY(0);
 }
 
@@ -52,7 +52,7 @@ nav a:active {
     padding: 0 2rem;
 }
 
-div {
+.content {
     background-color: #ffffff;
     padding: 2rem;
     border-radius: 8px;
@@ -60,9 +60,8 @@ div {
     margin-top: 1.5rem;
 }
 
-
 @media (max-width: 768px) {
-    nav {
+    .header-nav {
         flex-direction: column;
         gap: 1rem;
         text-align: center;
@@ -73,11 +72,10 @@ div {
         padding: 0 1rem;
     }
 
-    div {
+    .content {
         padding: 1.5rem;
     }
 }
-
 
 @media (min-width: 1200px) {
     .main-container {
