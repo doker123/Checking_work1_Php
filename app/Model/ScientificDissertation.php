@@ -50,9 +50,6 @@ class ScientificDissertation extends Model
         );
     }
 
-    /**
-     * Научный руководитель через команду
-     */
     public function director()
     {
         return $this->hasOneThrough(
