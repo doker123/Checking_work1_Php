@@ -4,6 +4,7 @@
 <div class="admin-container">
     <h1 class="admin-title">Отчёт по защитам за период</h1>
     <form method="POST" action="<?= app()->route->getUrl('/report/defend') ?>">
+        <input type="hidden" name="csrf_token" value="<?= \Src\Auth\Auth::generateCSRF() ?>">
         <div class="form-row">
             <div class="form-group">
                 <label>Дата от</label>

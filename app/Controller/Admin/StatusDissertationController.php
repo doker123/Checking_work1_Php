@@ -5,6 +5,7 @@ namespace Controller\Admin;
 use Model\StatusDissertation;
 use Src\View;
 use Src\Request;
+use Src\Validator\Validator;
 
 class StatusDissertationController
 {
@@ -21,6 +22,18 @@ class StatusDissertationController
 
     public function store(Request $request): void
     {
+        $validator = new Validator($request->all(), [
+            'status' => ['required'],
+        ], [
+            'required' => 'Поле :field обязательно для заполнения',
+        ]);
+
+        if ($validator->fails()) {
+            $errors = array_merge(...array_values($validator->errors()));
+            echo '<pre>' . htmlspecialchars(json_encode($errors, JSON_UNESCAPED_UNICODE)) . '</pre>';
+            return;
+        }
+
         StatusDissertation::create([
             'status' => $request->status,
         ]);
@@ -28,20 +41,20 @@ class StatusDissertationController
         app()->route->redirect('/admin/statuses');
     }
 
-    public function view($id): string
-    {
-        $status = StatusDissertation::with('dissertations')->find($id);
-        return (new View('admin.statuses.view', ['status' => $status]))->render();
-    }
-
-    public function edit($id): string
-    {
-        $status = StatusDissertation::find($id);
-        return (new View('admin.statuses.edit', ['status' => $status]))->render();
-    }
-
     public function update(Request $request, $id): void
     {
+        $validator = new Validator($request->all(), [
+            'status' => ['required'],
+        ], [
+            'required' => 'Поле :field обязательно для заполнения',
+        ]);
+
+        if ($validator->fails()) {
+            $errors = array_merge(...array_values($validator->errors()));
+            echo '<pre>' . htmlspecialchars(json_encode($errors, JSON_UNESCAPED_UNICODE)) . '</pre>';
+            return;
+        }
+
         $status = StatusDissertation::find($id);
         $status->update([
             'status' => $request->status,

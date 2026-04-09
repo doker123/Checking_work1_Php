@@ -6,6 +6,7 @@ use Model\ScientificDirector;
 use Model\AcademicTitle;
 use Src\View;
 use Src\Request;
+use Src\Validator\Validator;
 
 class DirectorController
 {
@@ -23,10 +24,29 @@ class DirectorController
 
     public function store(Request $request): void
     {
+        $validator = new Validator($request->all(), [
+            'last_name' => ['required'],
+            'name' => ['required'],
+            'patronum' => ['required'],
+            'date_of_birth' => ['required'],
+            'gender' => ['required'],
+            'citizenship' => ['required'],
+            'login' => ['required'],
+            'password' => ['required'],
+        ], [
+            'required' => 'Поле :field обязательно для заполнения',
+        ]);
+
+        if ($validator->fails()) {
+            $errors = array_merge(...array_values($validator->errors()));
+            echo '<pre>' . htmlspecialchars(json_encode($errors, JSON_UNESCAPED_UNICODE)) . '</pre>';
+            return;
+        }
+
         ScientificDirector::create([
             'name' => $request->name,
             'patronum' => $request->patronum,
-            'lasr_name' => $request->last_name,
+            'last_name' => $request->last_name,
             'date_of_birth' => $request->date_of_birth,
             'gender' => $request->gender,
             'citizenship' => $request->citizenship,
@@ -54,11 +74,29 @@ class DirectorController
 
     public function update(Request $request, $id): void
     {
+        $validator = new Validator($request->all(), [
+            'last_name' => ['required'],
+            'name' => ['required'],
+            'patronum' => ['required'],
+            'date_of_birth' => ['required'],
+            'gender' => ['required'],
+            'citizenship' => ['required'],
+            'login' => ['required'],
+        ], [
+            'required' => 'Поле :field обязательно для заполнения',
+        ]);
+
+        if ($validator->fails()) {
+            $errors = array_merge(...array_values($validator->errors()));
+            echo '<pre>' . htmlspecialchars(json_encode($errors, JSON_UNESCAPED_UNICODE)) . '</pre>';
+            return;
+        }
+
         $director = ScientificDirector::find($id);
         $director->update([
             'name' => $request->name,
             'patronum' => $request->patronum,
-            'lasr_name' => $request->last_name,
+            'last_name' => $request->last_name,
             'date_of_birth' => $request->date_of_birth,
             'gender' => $request->gender,
             'citizenship' => $request->citizenship,

@@ -8,6 +8,7 @@
         <a href="<?= app()->route->getUrl('/admin/dissertations') ?>">← Назад к диссертациям</a>
     </div>
     <form method="POST" action="<?= app()->route->getUrl('/admin/dissertations/store') ?>">
+        <input type="hidden" name="csrf_token" value="<?= \Src\Auth\Auth::generateCSRF() ?>">
         <div class="form-group">
             <label>Тема</label>
             <textarea name="theme" rows="3" required></textarea>

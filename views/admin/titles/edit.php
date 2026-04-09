@@ -8,6 +8,7 @@
         <a href="<?= app()->route->getUrl('/admin/titles') ?>">← Назад к званиям</a>
     </div>
     <form method="POST" action="<?= app()->route->getUrl('/admin/titles/' . $title->title_id . '/update') ?>">
+        <input type="hidden" name="csrf_token" value="<?= \Src\Auth\Auth::generateCSRF() ?>">
         <div class="form-group">
             <label>Учёное звание</label>
             <input type="text" name="academic_title" value="<?= htmlspecialchars($title->academic_title) ?>" required>

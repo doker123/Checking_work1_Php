@@ -7,6 +7,7 @@ use Model\StatusDissertation;
 use Model\DevelopmentTeam;
 use Src\View;
 use Src\Request;
+use Src\Validator\Validator;
 
 class DissertationController
 {
@@ -25,6 +26,24 @@ class DissertationController
 
     public function store(Request $request): void
     {
+        $validator = new Validator($request->all(), [
+            'theme' => ['required'],
+            'approval_date' => ['required', 'date'],
+            'status_id' => ['required', 'numeric'],
+            'scientific_specialy' => ['required'],
+            'team_id' => ['required', 'numeric'],
+        ], [
+            'required' => 'Поле :field обязательно для заполнения',
+            'date' => 'Поле :field должно быть датой в формате YYYY-MM-DD',
+            'numeric' => 'Поле :field должно быть числом',
+        ]);
+
+        if ($validator->fails()) {
+            $errors = array_merge(...array_values($validator->errors()));
+            echo '<pre>' . htmlspecialchars(json_encode($errors, JSON_UNESCAPED_UNICODE)) . '</pre>';
+            return;
+        }
+
         ScientificDissertation::create([
             'theme' => $request->theme,
             'approval_date' => $request->approval_date,
@@ -56,6 +75,24 @@ class DissertationController
 
     public function update(Request $request, $id): void
     {
+        $validator = new Validator($request->all(), [
+            'theme' => ['required'],
+            'approval_date' => ['required', 'date'],
+            'status_id' => ['required', 'numeric'],
+            'scientific_specialy' => ['required'],
+            'team_id' => ['required', 'numeric'],
+        ], [
+            'required' => 'Поле :field обязательно для заполнения',
+            'date' => 'Поле :field должно быть датой в формате YYYY-MM-DD',
+            'numeric' => 'Поле :field должно быть числом',
+        ]);
+
+        if ($validator->fails()) {
+            $errors = array_merge(...array_values($validator->errors()));
+            echo '<pre>' . htmlspecialchars(json_encode($errors, JSON_UNESCAPED_UNICODE)) . '</pre>';
+            return;
+        }
+
         $dissertation = ScientificDissertation::find($id);
         $dissertation->update([
             'theme' => $request->theme,

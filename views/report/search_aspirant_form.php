@@ -5,6 +5,7 @@
     <h1 class="admin-title">Поиск аспирантов по научному руководителю</h1>
 
     <form method="POST" action="<?= app()->route->getUrl('/report/search-aspirant') ?>">
+        <input type="hidden" name="csrf_token" value="<?= \Src\Auth\Auth::generateCSRF() ?>">
         <div class="form-group">
             <label>
                 Научный руководитель

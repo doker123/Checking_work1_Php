@@ -9,6 +9,7 @@
         <a href="<?= app()->route->getUrl('/admin/teams') ?>">← Назад к командам</a>
     </div>
     <form method="POST" action="<?= app()->route->getUrl('/admin/teams/store') ?>">
+        <input type="hidden" name="csrf_token" value="<?= \Src\Auth\Auth::generateCSRF() ?>">
         <div class="form-group">
             <label>Научный руководитель</label>
             <select name="director_id" required>

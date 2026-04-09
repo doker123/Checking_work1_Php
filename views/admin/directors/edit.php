@@ -8,6 +8,7 @@
         <a href="<?= app()->route->getUrl('/admin/directors') ?>">← Назад к руководителям</a>
     </div>
     <form method="POST" action="<?= app()->route->getUrl('/admin/directors/' . $director->director_id . '/update') ?>">
+        <input type="hidden" name="csrf_token" value="<?= \Src\Auth\Auth::generateCSRF() ?>">
         <div class="form-row">
             <div class="form-group">
                 <label>Фамилия</label>

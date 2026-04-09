@@ -6,6 +6,7 @@ use Model\ScientificDissertation;
 use Model\ScientificDirector;
 use Src\View;
 use Src\Request;
+use Src\Validator\Validator;
 
 class ReportController
 {
@@ -16,6 +17,20 @@ class ReportController
 
     public function defendReport(Request $request): string
     {
+        $validator = new Validator($request->all(), [
+            'date_from' => ['required'],
+            'date_to' => ['required'],
+        ], [
+            'required' => 'Поле :field обязательно для заполнения',
+        ]);
+
+        if ($validator->fails()) {
+            $errors = array_merge(...array_values($validator->errors()));
+            return (new View('report.defend_form', [
+                'errors' => $errors,
+            ]))->render();
+        }
+
         $dateFrom = $request->date_from;
         $dateTo = $request->date_to;
 
@@ -50,6 +65,21 @@ class ReportController
 
     public function searchAspirant(Request $request): string
     {
+        $validator = new Validator($request->all(), [
+            'director_id' => ['required'],
+        ], [
+            'required' => 'Поле :field обязательно для заполнения',
+        ]);
+
+        if ($validator->fails()) {
+            $errors = array_merge(...array_values($validator->errors()));
+            $directors = ScientificDirector::all();
+            return (new View('report.search_aspirant_form', [
+                'directors' => $directors,
+                'errors' => $errors,
+            ]))->render();
+        }
+
         $directorId = $request->director_id;
 
         $director = ScientificDirector::with([

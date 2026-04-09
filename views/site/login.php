@@ -9,6 +9,7 @@
     <?php endif; ?>
 
     <form method="POST" class="auth-form">
+        <input type="hidden" name="csrf_token" value="<?= \Src\Auth\Auth::generateCSRF() ?>">
         <label>
             Логин
             <input type="text" name="login" required placeholder="Введите логин">

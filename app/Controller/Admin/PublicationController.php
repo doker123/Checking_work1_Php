@@ -6,6 +6,7 @@ use Model\ScientificPublication;
 use Model\DevelopmentTeam;
 use Src\View;
 use Src\Request;
+use Src\Validator\Validator;
 
 class PublicationController
 {
@@ -23,6 +24,21 @@ class PublicationController
 
     public function store(Request $request): void
     {
+        $validator = new Validator($request->all(), [
+            'title' => ['required'],
+            'edition' => ['required'],
+            'publication' => ['required'],
+            'team_id' => ['required'],
+        ], [
+            'required' => 'Поле :field обязательно для заполнения',
+        ]);
+
+        if ($validator->fails()) {
+            $errors = array_merge(...array_values($validator->errors()));
+            echo '<pre>' . htmlspecialchars(json_encode($errors, JSON_UNESCAPED_UNICODE)) . '</pre>';
+            return;
+        }
+
         ScientificPublication::create([
             'title' => $request->title,
             'edition' => $request->edition,
@@ -49,6 +65,21 @@ class PublicationController
 
     public function update(Request $request, $id): void
     {
+        $validator = new Validator($request->all(), [
+            'title' => ['required'],
+            'edition' => ['required'],
+            'publication' => ['required'],
+            'team_id' => ['required'],
+        ], [
+            'required' => 'Поле :field обязательно для заполнения',
+        ]);
+
+        if ($validator->fails()) {
+            $errors = array_merge(...array_values($validator->errors()));
+            echo '<pre>' . htmlspecialchars(json_encode($errors, JSON_UNESCAPED_UNICODE)) . '</pre>';
+            return;
+        }
+
         $publication = ScientificPublication::find($id);
         $publication->update([
             'title' => $request->title,

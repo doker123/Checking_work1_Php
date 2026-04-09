@@ -7,6 +7,7 @@
         <a href="<?= app()->route->getUrl('/admin/statuses') ?>">← Назад к статусам</a>
     </div>
     <form method="POST" action="<?= app()->route->getUrl('/admin/statuses/store') ?>">
+        <input type="hidden" name="csrf_token" value="<?= \Src\Auth\Auth::generateCSRF() ?>">
         <div class="form-group">
             <label>Статус</label>
             <input type="text" name="status" required placeholder="Например: Пишется, Предзащита, Защищена">
