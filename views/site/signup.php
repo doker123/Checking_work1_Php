@@ -13,6 +13,7 @@
     <?php endif; ?>
 
     <form method="POST" class="auth-form" id="signupForm">
+        <input type="hidden" name="csrf_token" value="<?= \Src\Auth\Auth::generateCSRF() ?>">
         <label>
             Роль
             <select name="user_type" id="userType" required>

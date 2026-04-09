@@ -85,4 +85,11 @@ class Auth
         }
         return 'Гость';
     }
+
+    public static function generateCSRF(): string
+    {
+        $token = bin2hex(random_bytes(32));
+        Session::set('csrf_token', $token);
+        return $token;
+    }
 }

@@ -6,6 +6,7 @@ use FastRoute\RouteCollector;
 use FastRoute\RouteParser\Std;
 use FastRoute\DataGenerator\MarkBased;
 use FastRoute\Dispatcher\MarkBased as Dispatcher;
+use Src\Request;
 use Src\Traits\SingletonTrait;
 
 class Middleware
@@ -29,14 +30,31 @@ class Middleware
         $this->middlewareCollector = new RouteCollector(new Std(), new MarkBased());
     }
 
-    public function runMiddlewares(string $httpMethod, string $uri): Request
+    public function go(string $httpMethod, string $uri, Request $request): Request
     {
-        $request = new Request();
-        $routeMiddleware = app()->settings->app['routeMiddleware'];
+        return $this->runMiddlewares($httpMethod, $uri,
+            $this->runAppMiddlewares($request));
+    }
 
+    private function runMiddlewares(string $httpMethod, string $uri, Request $request): Request
+    {
+        $routeMiddleware = app()->settings->app['routeMiddleware'];
         foreach ($this->getMiddlewaresForRoute($httpMethod, $uri) as $middleware) {
             $args = explode(':', $middleware);
-            (new $routeMiddleware[$args[0]])->handle($request, $args[1] ?? null);
+            $request = (new $routeMiddleware[$args[0]])->handle(
+                $request, $args[1] ?? null) ?? $request;
+        }
+        return $request;
+    }
+    private function runAppMiddlewares(Request $request): Request
+    {
+        if (!isset(app()->settings->app['routeAppMiddleware'])) {
+            return $request;
+        }
+        $routeAppMiddleware = app()->settings->app[
+            'routeAppMiddleware'];
+        foreach ($routeAppMiddleware as $name => $class) {
+            $request = (new $class)->handle($request) ?? $request;
         }
         return $request;
     }

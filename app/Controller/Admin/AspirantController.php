@@ -5,6 +5,7 @@ namespace Controller\Admin;
 use Model\Aspirant;
 use Src\View;
 use Src\Request;
+use Src\Validator\Validator;
 
 class AspirantController
 {
@@ -21,6 +22,29 @@ class AspirantController
 
     public function store(Request $request): void
     {
+        $validator = new Validator($request->all(), [
+            'last_name' => ['required'],
+            'name' => ['required'],
+            'patronum' => ['required'],
+            'date_of_birth' => ['required', 'date'],
+            'gender' => ['required', 'numeric'],
+            'citizenship' => ['required'],
+            'identity_document' => ['required'],
+            'login' => ['required', 'min:3'],
+            'password' => ['required', 'min:6'],
+        ], [
+            'required' => 'Поле :field обязательно для заполнения',
+            'date' => 'Поле :field должно быть датой в формате YYYY-MM-DD',
+            'numeric' => 'Поле :field должно быть числом',
+            'min' => 'Поле :field должно содержать минимум :min символов',
+        ]);
+
+        if ($validator->fails()) {
+            $errors = array_merge(...array_values($validator->errors()));
+            echo '<pre>' . htmlspecialchars(json_encode($errors, JSON_UNESCAPED_UNICODE)) . '</pre>';
+            return;
+        }
+
         Aspirant::create([
             'name' => $request->name,
             'patronum' => $request->patronum,
@@ -28,7 +52,7 @@ class AspirantController
             'date_of_birth' => $request->date_of_birth,
             'gender' => $request->gender,
             'citizenship' => $request->citizenship,
-            'identity document' => $request->{'identity_document'},
+            'identity_document' => $request->{'identity_document'},
             'login' => $request->login,
             'password' => password_hash($request->password, PASSWORD_DEFAULT),
         ]);
@@ -50,6 +74,28 @@ class AspirantController
 
     public function update(Request $request, $id): void
     {
+        $validator = new Validator($request->all(), [
+            'last_name' => ['required'],
+            'name' => ['required'],
+            'patronum' => ['required'],
+            'date_of_birth' => ['required', 'date'],
+            'gender' => ['required', 'numeric'],
+            'citizenship' => ['required'],
+            'identity_document' => ['required'],
+            'login' => ['required', 'min:3'],
+        ], [
+            'required' => 'Поле :field обязательно для заполнения',
+            'date' => 'Поле :field должно быть датой в формате YYYY-MM-DD',
+            'numeric' => 'Поле :field должно быть числом',
+            'min' => 'Поле :field должно содержать минимум :min символов',
+        ]);
+
+        if ($validator->fails()) {
+            $errors = array_merge(...array_values($validator->errors()));
+            echo '<pre>' . htmlspecialchars(json_encode($errors, JSON_UNESCAPED_UNICODE)) . '</pre>';
+            return;
+        }
+
         $aspirant = Aspirant::find($id);
         $aspirant->update([
             'name' => $request->name,
@@ -58,7 +104,7 @@ class AspirantController
             'date_of_birth' => $request->date_of_birth,
             'gender' => $request->gender,
             'citizenship' => $request->citizenship,
-            'identity document' => $request->{'identity_document'},
+            'identity_document' => $request->{'identity_document'},
             'login' => $request->login,
         ]);
 

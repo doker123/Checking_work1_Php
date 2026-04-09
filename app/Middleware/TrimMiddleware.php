@@ -1,0 +1,15 @@
+<?php
+namespace Middleware;
+
+use Src\Request;
+
+class TrimMiddleware
+{
+    public function handle(Request $request): Request
+    {
+        foreach ($request->all() as $key => $value) {
+            $request->set($key, is_string($value) ? trim($value) : $value);
+        }
+        return $request;
+    }
+}

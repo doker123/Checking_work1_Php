@@ -5,6 +5,7 @@ namespace Controller\Admin;
 use Model\AcademicTitle;
 use Src\View;
 use Src\Request;
+use Src\Validator\Validator;
 
 class AcademicTitleController
 {
@@ -21,6 +22,18 @@ class AcademicTitleController
 
     public function store(Request $request): void
     {
+        $validator = new Validator($request->all(), [
+            'academic_title' => ['required'],
+        ], [
+            'required' => 'Поле :field обязательно для заполнения',
+        ]);
+
+        if ($validator->fails()) {
+            $errors = array_merge(...array_values($validator->errors()));
+            echo '<pre>' . htmlspecialchars(json_encode($errors, JSON_UNESCAPED_UNICODE)) . '</pre>';
+            return;
+        }
+
         AcademicTitle::create([
             'academic_title' => $request->academic_title,
         ]);
@@ -28,20 +41,20 @@ class AcademicTitleController
         app()->route->redirect('/admin/titles');
     }
 
-    public function view($id): string
-    {
-        $title = AcademicTitle::with('scientificDirectors')->find($id);
-        return (new View('admin.titles.view', ['title' => $title]))->render();
-    }
-
-    public function edit($id): string
-    {
-        $title = AcademicTitle::find($id);
-        return (new View('admin.titles.edit', ['title' => $title]))->render();
-    }
-
     public function update(Request $request, $id): void
     {
+        $validator = new Validator($request->all(), [
+            'academic_title' => ['required'],
+        ], [
+            'required' => 'Поле :field обязательно для заполнения',
+        ]);
+
+        if ($validator->fails()) {
+            $errors = array_merge(...array_values($validator->errors()));
+            echo '<pre>' . htmlspecialchars(json_encode($errors, JSON_UNESCAPED_UNICODE)) . '</pre>';
+            return;
+        }
+
         $title = AcademicTitle::find($id);
         $title->update([
             'academic_title' => $request->academic_title,

@@ -10,6 +10,8 @@ use Model\AcademicTitle;
 use Src\View;
 use Src\Request;
 use Src\Auth\Auth;
+use Src\Session;
+use Src\Validator\Validator;
 
 class Site
 {
@@ -20,15 +22,29 @@ class Site
             return new View('site.signup', ['titles' => $titles]);
         }
 
+        if (!hash_equals(Session::get('csrf_token') ?? '', $request->csrf_token ?? '')) {
+            return new View('site.signup', ['errors' => ['Неверный CSRF-токен']]);
+        }
+
+        $validator = new Validator($request->all(), [
+            'user_type' => ['required'],
+            'login' => ['required'],
+            'password' => ['required'],
+            'name' => ['required'],
+        ], [
+            'required' => 'Поле :field обязательно для заполнения',
+        ]);
+
+        if ($validator->fails()) {
+            $titles = AcademicTitle::all();
+            return new View('site.signup', [
+                'errors' => array_merge(...array_values($validator->errors())),
+                'data' => $request->all(),
+                'titles' => $titles,
+            ]);
+        }
+
         $errors = [];
-
-        if (empty($request->login) || empty($request->password)) {
-            $errors[] = 'Логин и пароль обязательны';
-        }
-
-        if (empty($request->user_type)) {
-            $errors[] = 'Выберите роль';
-        }
 
         $login = $request->login;
         $exists =
@@ -88,6 +104,10 @@ class Site
             return (new View('site.login'))->render();
         }
 
+        if (!hash_equals(Session::get('csrf_token') ?? '', $request->csrf_token ?? '')) {
+            return new View('site.login', ['message' => 'Неверный CSRF-токен']);
+        }
+
         if (Auth::attempt($request->all())) {
             $userType = Auth::getUserType();
             match ($userType) {
@@ -99,7 +119,7 @@ class Site
             return '';
         }
 
-        return (new View('site.post'))->render();
+        return (new View('site.login', ['message' => 'Неверный логин или пароль']))->render();
     }
 
     public function logout(): void

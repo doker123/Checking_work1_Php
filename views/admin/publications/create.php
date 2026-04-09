@@ -8,6 +8,7 @@
         <a href="<?= app()->route->getUrl('/admin/publications') ?>">← Назад к публикациям</a>
     </div>
     <form method="POST" action="<?= app()->route->getUrl('/admin/publications/store') ?>">
+        <input type="hidden" name="csrf_token" value="<?= \Src\Auth\Auth::generateCSRF() ?>">
         <div class="form-group">
             <label>Название</label>
             <input type="text" name="title" required>

@@ -7,6 +7,7 @@ use Model\ScientificDirector;
 use Model\Aspirant;
 use Src\View;
 use Src\Request;
+use Src\Validator\Validator;
 
 class TeamController
 {
@@ -25,6 +26,19 @@ class TeamController
 
     public function store(Request $request): void
     {
+        $validator = new Validator($request->all(), [
+            'director_id' => ['required'],
+            'aspirant_id' => ['required'],
+        ], [
+            'required' => 'Поле :field обязательно для заполнения',
+        ]);
+
+        if ($validator->fails()) {
+            $errors = array_merge(...array_values($validator->errors()));
+            echo '<pre>' . htmlspecialchars(json_encode($errors, JSON_UNESCAPED_UNICODE)) . '</pre>';
+            return;
+        }
+
         DevelopmentTeam::create([
             'director_id' => $request->director_id,
             'aspirant_id' => $request->aspirant_id,
@@ -53,6 +67,19 @@ class TeamController
 
     public function update(Request $request, $id): void
     {
+        $validator = new Validator($request->all(), [
+            'director_id' => ['required'],
+            'aspirant_id' => ['required'],
+        ], [
+            'required' => 'Поле :field обязательно для заполнения',
+        ]);
+
+        if ($validator->fails()) {
+            $errors = array_merge(...array_values($validator->errors()));
+            echo '<pre>' . htmlspecialchars(json_encode($errors, JSON_UNESCAPED_UNICODE)) . '</pre>';
+            return;
+        }
+
         $team = DevelopmentTeam::find($id);
         $team->update([
             'director_id' => $request->director_id,
