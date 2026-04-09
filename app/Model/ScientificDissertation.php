@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class ScientificDissertation extends Model
 {
-    protected $table = 'Scientific_Dissertations';
+    protected $table = 'scientific_dissertations';
     protected $primaryKey = 'dissertations_id';
     public $timestamps = false;
 
@@ -19,25 +19,16 @@ class ScientificDissertation extends Model
         'team_id',
     ];
 
-    /**
-     * Статус диссертации
-     */
     public function status(): BelongsTo
     {
         return $this->belongsTo(StatusDissertation::class, 'status_id', 'status_id');
     }
 
-    /**
-     * Команда разработки (аспирант + руководитель)
-     */
     public function team(): BelongsTo
     {
         return $this->belongsTo(DevelopmentTeam::class, 'team_id', 'team_id');
     }
 
-    /**
-     * Аспирант через команду
-     */
     public function aspirant()
     {
         return $this->hasOneThrough(
@@ -62,9 +53,6 @@ class ScientificDissertation extends Model
         );
     }
 
-    /**
-     * Статус текстом (пишется/предзащита/защищена)
-     */
     public function getStatusTextAttribute(): string
     {
         return $this->status?->status ?? 'Неизвестно';

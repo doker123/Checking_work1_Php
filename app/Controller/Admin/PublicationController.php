@@ -1,65 +1,71 @@
 <?php
+
 namespace Controller\Admin;
 
 use Model\ScientificPublication;
+use Model\DevelopmentTeam;
 use Src\View;
 use Src\Request;
 
 class PublicationController
 {
-    public function index()
+    public function index(): string
     {
-        $publication = ScientificPublication::all();
-        return(new View("admin/publications/index,",
-            ['publications'=>$publication]))->
-        render('admin/publications/index',
-            ['publications'=>$publication]);
+        $publications = ScientificPublication::with(['team'])->get();
+        return (new View('admin.publications.index', ['publications' => $publications]))->render();
     }
-    public function create():string
+
+    public function create(): string
     {
-        return(new View("admin/publications/create"))->
-        render();
+        $teams = DevelopmentTeam::all();
+        return (new View('admin.publications.create', ['teams' => $teams]))->render();
     }
-    public function store():void
+
+    public function store(Request $request): void
     {
         ScientificPublication::create([
-            'title',
-            'edition',
-            'publication',
-            'index_rsci',
-            'team_id',
+            'title' => $request->title,
+            'edition' => $request->edition,
+            'publication' => $request->publication,
+            'index_rsci' => $request->index_rsci,
+            'team_id' => $request->team_id,
         ]);
+
         app()->route->redirect('/admin/publications');
     }
-    public function view($id)
+
+    public function view($id): string
     {
-        $publication = ScientificPublication::with('publication')->find($id);
-        return(new View("admin/publications/view,",
-            ['publications'=>$publication]))->
-        render();
+        $publication = ScientificPublication::with(['team.aspirant', 'team.director'])->find($id);
+        return (new View('admin.publications.view', ['publication' => $publication]))->render();
     }
+
     public function edit($id): string
     {
-        $publication = ScientificPublication::with('publication')->find($id);
-        return(new View("admin/publications/edit,",
-            ['publications'=>$publication]))->
-        render();
+        $publication = ScientificPublication::find($id);
+        $teams = DevelopmentTeam::all();
+        return (new View('admin.publications.edit', ['publication' => $publication, 'teams' => $teams]))->render();
     }
-    public function update($id)
+
+    public function update(Request $request, $id): void
     {
-        $publications = ScientificPublication::find($id);
-        $publications->update([
-            'title',
-            'edition',
-            'publication',
-            'index_rsci',
-            'team_id',
+        $publication = ScientificPublication::find($id);
+        $publication->update([
+            'title' => $request->title,
+            'edition' => $request->edition,
+            'publication' => $request->publication,
+            'index_rsci' => $request->index_rsci,
+            'team_id' => $request->team_id,
         ]);
+
         app()->route->redirect('/admin/publications');
     }
-    public function delete($id):void
+
+    public function delete($id): void
     {
-        $publications = ScientificPublication::find($id);
-        $publications->delete();
+        $publication = ScientificPublication::find($id);
+        $publication->delete();
+
+        app()->route->redirect('/admin/publications');
     }
 }

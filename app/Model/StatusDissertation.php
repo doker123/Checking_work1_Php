@@ -7,13 +7,14 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class StatusDissertation extends Model
 {
-    protected $table = 'Status_Dissertations';
+    protected $table = 'status_dissertations';
     protected $primaryKey = 'status_id';
     public $timestamps = false;
 
     protected $fillable = [
         'status',
     ];
+
 
     public function dissertations(): HasMany
     {

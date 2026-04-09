@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class ScientificPublication extends Model
 {
-    protected $table = 'Scientific_Publications';
+    protected $table = 'scientific_publications';
     protected $primaryKey = 'publication_id';
     public $timestamps = false;
 
@@ -19,17 +19,11 @@ class ScientificPublication extends Model
         'team_id',
     ];
 
-    /**
-     * Команда разработки (аспирант + руководитель)
-     */
     public function team(): BelongsTo
     {
         return $this->belongsTo(DevelopmentTeam::class, 'team_id', 'team_id');
     }
 
-    /**
-     * Аспирант через команду
-     */
     public function aspirant()
     {
         return $this->hasOneThrough(
@@ -42,9 +36,6 @@ class ScientificPublication extends Model
         );
     }
 
-    /**
-     * Научный руководитель через команду
-     */
     public function director()
     {
         return $this->hasOneThrough(
@@ -57,17 +48,11 @@ class ScientificPublication extends Model
         );
     }
 
-    /**
-     * Тип издания (журнал/сборник)
-     */
     public function getEditionTypeAttribute(): string
     {
         return $this->edition ?? 'Не указано';
     }
 
-    /**
-     * Индексация (РИНЦ/Scopus)
-     */
     public function getIndexingAttribute(): string
     {
         return $this->index_rsci ?? 'Не индексировано';

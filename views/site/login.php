@@ -1,21 +1,22 @@
-<link rel="stylesheet" href="/Checking_work1_Php/public/css/login.css">
-
+<?php $url = app()->route; ?>
+<link rel="stylesheet" href="<?= $url->getUrl('/public/css/site/login.css') ?>">
 
 <div class="auth-container">
     <h2 class="auth-title">Авторизация</h2>
-    <h3 class="auth-message <?= $message_type ?? ''; ?>"><?= $message ?? ''; ?></h3>
-    <h3 class="user-great"><?= app()->auth->user()->name ?? ''; ?></h3>
 
-    <?php if (!app()->auth->check()): ?>
-        <form method="post" class="auth-form">
-            <label>Логин
-                <input type="text" name="login" required>
-            </label>
-            <label>Пароль
-                <input type="password" name="password" required>
-            </label>
-            <button class="auth-btn">Войти</button>
-        </form>
+    <?php if (isset($message) && $message): ?>
+        <div class="auth-message" style="background: #ffebee; color: #c62828;"><?= htmlspecialchars($message) ?></div>
     <?php endif; ?>
-</div>
 
+    <form method="POST" class="auth-form">
+        <label>
+            Логин
+            <input type="text" name="login" required placeholder="Введите логин">
+        </label>
+        <label>
+            Пароль
+            <input type="password" name="password" required placeholder="Введите пароль">
+        </label>
+        <button class="auth-btn" type="submit">Войти</button>
+    </form>
+</div>
