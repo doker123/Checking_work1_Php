@@ -6,26 +6,21 @@ use Src\Session;
 
 class Auth
 {
-    //Свойство для хранения любого класса, реализующего интерфейс IdentityInterface
     private static IdentityInterface $user;
 
-    //Инициализация класса пользователя
     public static function init(IdentityInterface $user): void
     {
         self::$user = $user;
-        if (self::user()) {
-            self::login(self::user());
+        if (self::check()) {
         }
     }
 
-    //Вход пользователя по модели
     public static function login(IdentityInterface $user): void
     {
         self::$user = $user;
-        Session::set('id', self::$user->getId());
+        Session::set('user_id', $user->getId());
     }
 
-    //Аутентификация пользователя и вход по учетным данным
     public static function attempt(array $credentials): bool
     {
         if ($user = self::$user->attemptIdentity($credentials)) {
@@ -35,27 +30,59 @@ class Auth
         return false;
     }
 
-    //Возврат текущего аутентифицированного пользователя
     public static function user()
     {
-        $id = Session::get('id') ?? 0;
-        return self::$user->findIdentity($id);
+        $id = Session::get('user_id') ?? 0;
+        if ($id > 0) {
+            return self::$user->findIdentity($id);
+        }
+        return null;
     }
 
-    //Проверка является ли текущий пользователь аутентифицированным
     public static function check(): bool
     {
-        if (self::user()) {
-            return true;
-        }
-        return false;
+        $id = Session::get('user_id') ?? 0;
+        return $id > 0 && self::$user->findIdentity($id) !== null;
     }
 
-    //Выход текущего пользователя
     public static function logout(): bool
     {
-        Session::clear('id');
+        Session::clear('user_id');
+        Session::clear('user_type');
         return true;
     }
 
+    public static function getUserType(): string
+    {
+        return Session::get('user_type') ?? '';
+    }
+
+    public static function hasRole(string $role): bool
+    {
+        return self::getUserType() === $role;
+    }
+
+    public static function isAdmin(): bool
+    {
+        return self::hasRole('admin');
+    }
+
+    public static function isDirector(): bool
+    {
+        return self::hasRole('director');
+    }
+
+    public static function isAspirant(): bool
+    {
+        return self::hasRole('aspirant');
+    }
+
+    public static function getDisplayName(): string
+    {
+        $user = self::user();
+        if ($user && method_exists($user, 'getDisplayName')) {
+            return $user->getDisplayName();
+        }
+        return 'Гость';
+    }
 }

@@ -1,10 +1,8 @@
 <?php
-//Путь до директории с конфигурационными файлами
 const DIR_CONFIG = '/../config';
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
-//Функция, возвращающая массив всех настроек приложения
 function getConfigs(string $path = DIR_CONFIG): array
 {
     $settings = [];
@@ -16,7 +14,6 @@ function getConfigs(string $path = DIR_CONFIG): array
     }
     return $settings;
 }
-
 
 require_once __DIR__ . '/../routes/web.php';
 

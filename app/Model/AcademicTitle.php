@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class AcademicTitle extends Model
 {
-    protected $table = 'Academic_Title';
+    protected $table = 'academic_title';
     protected $primaryKey = 'title_id';
     public $timestamps = false;
 

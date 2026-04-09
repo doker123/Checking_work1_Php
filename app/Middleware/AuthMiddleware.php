@@ -1,16 +1,17 @@
 <?php
+
 namespace Middleware;
 
-use Closure;
 use Src\Auth\Auth;
 use Src\Request;
 
 class AuthMiddleware
 {
-    public function handle(Request $request)
+    public function handle(Request $request): void
     {
         if (!Auth::check()) {
             app()->route->redirect('/login');
+            exit;
         }
     }
 }
