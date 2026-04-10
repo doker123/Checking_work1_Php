@@ -10,12 +10,6 @@
         }
     ],
     "minimum-stability": "dev",
-    "repositories": [
-        {
-            "type": "path",
-            "url": "../collect"
-        }
-    ],
     "require": {
         "php": "^7.4 | ^8.0",
         "illuminate/database": "^10.38",
