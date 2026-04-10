@@ -31,6 +31,19 @@ class ScientificDirector extends Model implements IdentityInterface
         'password',
     ];
 
+    protected static function booted()
+    {
+        static::creating(function ($user) {
+            $user->password = password_hash($user->password, PASSWORD_BCRYPT);
+        });
+
+        static::updating(function ($user) {
+            if ($user->isDirty('password')) {
+                $user->password = password_hash($user->password, PASSWORD_BCRYPT);
+            }
+        });
+    }
+
     public function findIdentity(int $id)
     {
         return self::where('director_id', $id)->first();

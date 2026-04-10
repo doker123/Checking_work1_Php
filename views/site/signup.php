@@ -47,35 +47,35 @@
             <h4 style="margin-top:0;">Данные руководителя</h4>
             <div class="form-row">
                 <label>Фамилия
-                    <input type="text" name="last_name" value="<?= htmlspecialchars($data['last_name'] ?? '') ?>">
+                    <input type="text" name="director_last_name" value="<?= htmlspecialchars($data['director_last_name'] ?? '') ?>">
                 </label>
                 <label>Отчество
-                    <input type="text" name="patronum" value="<?= htmlspecialchars($data['patronum'] ?? '') ?>">
+                    <input type="text" name="director_patronum" value="<?= htmlspecialchars($data['director_patronum'] ?? '') ?>">
                 </label>
             </div>
             <div class="form-row">
                 <label>Дата рождения
-                    <input type="date" name="date_of_birth" value="<?= $data['date_of_birth'] ?? '' ?>">
+                    <input type="date" name="director_date_of_birth" value="<?= $data['director_date_of_birth'] ?? '' ?>">
                 </label>
                 <label>Пол
-                    <select name="gender">
-                        <option value="1" <?= ($data['gender'] ?? '1') === '1' ? 'selected' : '' ?>>Мужской</option>
-                        <option value="0" <?= ($data['gender'] ?? '') === '0' ? 'selected' : '' ?>>Женский</option>
+                    <select name="director_gender">
+                        <option value="1" <?= ($data['director_gender'] ?? '1') === '1' ? 'selected' : '' ?>>Мужской</option>
+                        <option value="0" <?= ($data['director_gender'] ?? '') === '0' ? 'selected' : '' ?>>Женский</option>
                     </select>
                 </label>
             </div>
             <label>Гражданство
-                <input type="text" name="citizenship" value="<?= htmlspecialchars($data['citizenship'] ?? 'РФ') ?>">
+                <input type="text" name="director_citizenship" value="<?= htmlspecialchars($data['director_citizenship'] ?? 'РФ') ?>">
             </label>
             <label>Учёная степень
-                <input type="text" name="academic_degree" placeholder="Например: к.т.н." value="<?= htmlspecialchars($data['academic_degree'] ?? '') ?>">
+                <input type="text" name="director_academic_degree" placeholder="Например: к.т.н." value="<?= htmlspecialchars($data['director_academic_degree'] ?? '') ?>">
             </label>
             <label>
                 Учёное звание
-                <select name="title_id">
+                <select name="director_title_id">
                     <option value="">— Не выбрано —</option>
                     <?php foreach ($titles ?? [] as $title): ?>
-                        <option value="<?= $title->title_id ?>" <?= ($data['title_id'] ?? '') == $title->title_id ? 'selected' : '' ?>>
+                        <option value="<?= $title->title_id ?>" <?= ($data['director_title_id'] ?? '') == $title->title_id ? 'selected' : '' ?>>
                             <?= htmlspecialchars($title->academic_title) ?>
                         </option>
                     <?php endforeach; ?>
@@ -88,28 +88,28 @@
             <h4 style="margin-top:0;">Данные аспиранта</h4>
             <div class="form-row">
                 <label>Фамилия
-                    <input type="text" name="last_name" value="<?= htmlspecialchars($data['last_name'] ?? '') ?>">
+                    <input type="text" name="aspirant_last_name" value="<?= htmlspecialchars($data['aspirant_last_name'] ?? '') ?>">
                 </label>
                 <label>Отчество
-                    <input type="text" name="patronum" value="<?= htmlspecialchars($data['patronum'] ?? '') ?>">
+                    <input type="text" name="aspirant_patronum" value="<?= htmlspecialchars($data['aspirant_patronum'] ?? '') ?>">
                 </label>
             </div>
             <div class="form-row">
                 <label>Дата рождения
-                    <input type="date" name="date_of_birth" value="<?= $data['date_of_birth'] ?? '' ?>">
+                    <input type="date" name="aspirant_date_of_birth" value="<?= $data['aspirant_date_of_birth'] ?? '' ?>">
                 </label>
                 <label>Пол
-                    <select name="gender">
-                        <option value="1" <?= ($data['gender'] ?? '1') === '1' ? 'selected' : '' ?>>Мужской</option>
-                        <option value="0" <?= ($data['gender'] ?? '') === '0' ? 'selected' : '' ?>>Женский</option>
+                    <select name="aspirant_gender">
+                        <option value="1" <?= ($data['aspirant_gender'] ?? '1') === '1' ? 'selected' : '' ?>>Мужской</option>
+                        <option value="0" <?= ($data['aspirant_gender'] ?? '') === '0' ? 'selected' : '' ?>>Женский</option>
                     </select>
                 </label>
             </div>
             <label>Гражданство
-                <input type="text" name="citizenship" value="<?= htmlspecialchars($data['citizenship'] ?? 'РФ') ?>">
+                <input type="text" name="aspirant_citizenship" value="<?= htmlspecialchars($data['aspirant_citizenship'] ?? 'РФ') ?>">
             </label>
             <label>Документ, удостоверяющий личность
-                <input type="text" name="identity_document" value="<?= htmlspecialchars($data['identity_document'] ?? '') ?>">
+                <input type="text" name="aspirant_identity_document" value="<?= htmlspecialchars($data['aspirant_identity_document'] ?? '') ?>">
             </label>
         </div>
 

@@ -60,42 +60,47 @@ class ReportController
     public function searchAspirantForm(): string
     {
         $directors = ScientificDirector::all();
-        return (new View('report.search_aspirant_form', ['directors' => $directors]))->render();
+        $aspirants = collect();
+        $searchQuery = '';
+        return (new View('report.search_aspirant_form', [
+            'directors' => $directors,
+            'aspirants' => $aspirants,
+            'searchQuery' => $searchQuery,
+        ]))->render();
     }
 
     public function searchAspirant(Request $request): string
     {
-        $validator = new Validator($request->all(), [
-            'director_id' => ['required'],
-        ], [
-            'required' => 'Поле :field обязательно для заполнения',
-        ]);
-
-        if ($validator->fails()) {
-            $errors = array_merge(...array_values($validator->errors()));
-            $directors = ScientificDirector::all();
-            return (new View('report.search_aspirant_form', [
-                'directors' => $directors,
-                'errors' => $errors,
-            ]))->render();
-        }
-
-        $directorId = $request->director_id;
-
-        $director = ScientificDirector::with([
-            'developmentTeams.aspirant.developmentTeams'
-        ])->find($directorId);
+        $directors = ScientificDirector::all();
+        $searchQuery = trim($request->search ?? '');
 
         $aspirants = collect();
-        if ($director) {
-            foreach ($director->developmentTeams as $team) {
-                $aspirants->push($team->aspirant);
+
+        if (strlen($searchQuery) >= 2) {
+            // Поиск по ФИО руководителя (только текстовые поля)
+            $directorsFound = ScientificDirector::where(function ($q) use ($searchQuery) {
+                $q->where('last_name', 'like', $searchQuery . '%')
+                  ->orWhere('name', 'like', $searchQuery . '%')
+                  ->orWhere('patronum', 'like', $searchQuery . '%');
+            })->get();
+
+            // Собираем всех аспирантов найденных руководителей
+            foreach ($directorsFound as $director) {
+                foreach ($director->developmentTeams as $team) {
+                    if ($team->aspirant) {
+                        $aspirants->push($team->aspirant);
+                    }
+                }
             }
+
+            // Удаляем дубликаты по ID
+            $aspirants = $aspirants->unique('aspirant_id');
         }
 
-        return (new View('report.search_aspirant_result', [
-            'director' => $director,
+        return (new View('report.search_aspirant_form', [
+            'directors' => $directors,
             'aspirants' => $aspirants,
+            'searchQuery' => $searchQuery,
         ]))->render();
     }
 }
