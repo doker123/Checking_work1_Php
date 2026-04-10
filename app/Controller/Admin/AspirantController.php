@@ -6,6 +6,7 @@ use Model\Aspirant;
 use Src\View;
 use Src\Request;
 use Src\Validator\Validator;
+use MvcHelpers\PasswordHasher;
 
 class AspirantController
 {
@@ -47,17 +48,10 @@ class AspirantController
             ]))->render();
         }
 
-        Aspirant::create([
-            'name' => $request->name,
-            'patronum' => $request->patronum,
-            'last_name' => $request->last_name,
-            'date_of_birth' => $request->date_of_birth,
-            'gender' => $request->gender,
-            'citizenship' => $request->citizenship,
-            'identity_document' => $request->{'identity_document'},
-            'login' => $request->login,
-            'password' => password_hash($request->password, PASSWORD_DEFAULT),
-        ]);
+        $data = $request->all();
+        $data['password'] = PasswordHasher::hash($data['password']);
+
+        Aspirant::create($data);
 
         app()->route->redirect('/admin/aspirants');
     }

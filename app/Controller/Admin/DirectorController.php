@@ -7,6 +7,7 @@ use Model\AcademicTitle;
 use Src\View;
 use Src\Request;
 use Src\Validator\Validator;
+use MvcHelpers\PasswordHasher;
 
 class DirectorController
 {
@@ -47,18 +48,10 @@ class DirectorController
             ]))->render();
         }
 
-        ScientificDirector::create([
-            'name' => $request->name,
-            'patronum' => $request->patronum,
-            'last_name' => $request->last_name,
-            'date_of_birth' => $request->date_of_birth,
-            'gender' => $request->gender,
-            'citizenship' => $request->citizenship,
-            'academic_degree' => $request->academic_degree,
-            'title_id' => $request->title_id,
-            'login' => $request->login,
-            'password' => password_hash($request->password, PASSWORD_DEFAULT),
-        ]);
+        $data = $request->all();
+        $data['password'] = PasswordHasher::hash($data['password']);
+
+        ScientificDirector::create($data);
 
         app()->route->redirect('/admin/directors');
     }

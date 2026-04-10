@@ -7,6 +7,7 @@ use Model\ScientificDirector;
 use Src\View;
 use Src\Request;
 use Src\Validator\Validator;
+use MvcHelpers\AspirantUtils;
 
 class ReportController
 {
@@ -72,30 +73,15 @@ class ReportController
 
     public function searchAspirant(Request $request): string
     {
-        $directors = ScientificDirector::all();
+        $directors = ScientificDirector::with('developmentTeams.aspirant')->get();
         $searchQuery = trim($request->search ?? '');
 
         $aspirants = collect();
 
         if (strlen($searchQuery) >= 2) {
-            // Поиск по ФИО руководителя (только текстовые поля)
-            $directorsFound = ScientificDirector::where(function ($q) use ($searchQuery) {
-                $q->where('last_name', 'like', $searchQuery . '%')
-                  ->orWhere('name', 'like', $searchQuery . '%')
-                  ->orWhere('patronum', 'like', $searchQuery . '%');
-            })->get();
-
-            // Собираем всех аспирантов найденных руководителей
-            foreach ($directorsFound as $director) {
-                foreach ($director->developmentTeams as $team) {
-                    if ($team->aspirant) {
-                        $aspirants->push($team->aspirant);
-                    }
-                }
-            }
-
-            // Удаляем дубликаты по ID
-            $aspirants = $aspirants->unique('aspirant_id');
+            // Используем утилиту из пакета mvc-helpers
+            $foundAspirants = AspirantUtils::searchAspirantsByDirectorName($directors->all(), $searchQuery);
+            $aspirants = collect($foundAspirants);
         }
 
         return (new View('report.search_aspirant_form', [

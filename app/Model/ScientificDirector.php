@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Src\Auth\IdentityInterface;
+use MvcHelpers\PasswordHasher;
+use MvcHelpers\NameFormatter;
 
 class ScientificDirector extends Model implements IdentityInterface
 {
@@ -34,12 +36,12 @@ class ScientificDirector extends Model implements IdentityInterface
     protected static function booted()
     {
         static::creating(function ($user) {
-            $user->password = password_hash($user->password, PASSWORD_BCRYPT);
+            $user->password = PasswordHasher::hash($user->password);
         });
 
         static::updating(function ($user) {
             if ($user->isDirty('password')) {
-                $user->password = password_hash($user->password, PASSWORD_BCRYPT);
+                $user->password = PasswordHasher::hash($user->password);
             }
         });
     }
@@ -58,7 +60,7 @@ class ScientificDirector extends Model implements IdentityInterface
     {
         $director = self::where('login', $credentials['login'])->first();
 
-        if ($director && password_verify($credentials['password'], $director->password)) {
+        if ($director && PasswordHasher::verify($credentials['password'], $director->password)) {
             return $director;
         }
 
@@ -72,7 +74,11 @@ class ScientificDirector extends Model implements IdentityInterface
 
     public function getDisplayName(): string
     {
-        return "{$this->last_name} {$this->name} {$this->patronum}";
+        return NameFormatter::fullName(
+            $this->last_name ?? '',
+            $this->name ?? '',
+            $this->patronum ?? ''
+        );
     }
 
     public function academicTitle(): BelongsTo
@@ -97,6 +103,10 @@ class ScientificDirector extends Model implements IdentityInterface
 
     public function getFullNameAttribute(): string
     {
-        return "{$this->last_name} {$this->name} {$this->patronum}";
+        return NameFormatter::fullName(
+            $this->last_name ?? '',
+            $this->name ?? '',
+            $this->patronum ?? ''
+        );
     }
 }

@@ -4,6 +4,7 @@ namespace Model;
 
 use Illuminate\Database\Eloquent\Model;
 use Src\Auth\IdentityInterface;
+use MvcHelpers\PasswordHasher;
 
 class Admin extends Model implements IdentityInterface
 {
@@ -24,12 +25,12 @@ class Admin extends Model implements IdentityInterface
     protected static function booted()
     {
         static::creating(function ($user) {
-            $user->password = password_hash($user->password, PASSWORD_BCRYPT);
+            $user->password = PasswordHasher::hash($user->password);
         });
 
         static::updating(function ($user) {
             if ($user->isDirty('password')) {
-                $user->password = password_hash($user->password, PASSWORD_BCRYPT);
+                $user->password = PasswordHasher::hash($user->password);
             }
         });
     }
@@ -48,7 +49,7 @@ class Admin extends Model implements IdentityInterface
     {
         $admin = self::where('login', $credentials['login'])->first();
 
-        if ($admin && password_verify($credentials['password'], $admin->password)) {
+        if ($admin && PasswordHasher::verify($credentials['password'], $admin->password)) {
             return $admin;
         }
 

@@ -10,11 +10,18 @@
         }
     ],
     "minimum-stability": "dev",
+    "repositories": [
+        {
+            "type": "path",
+            "url": "../collect"
+        }
+    ],
     "require": {
         "php": "^7.4 | ^8.0",
         "illuminate/database": "^10.38",
         "illuminate/events": "10.x-dev",
-        "nikic/fast-route": "^2.0@dev"
+        "nikic/fast-route": "^2.0@dev",
+        "doker123/collect_array_methods": "@dev"
     },
     "autoload": {
         "psr-4": {
@@ -22,7 +29,13 @@
             "Model\\": "app/Model/",
             "Controller\\": "app/Controller/",
             "Middleware\\": "app/Middleware/",
-            "Validators\\": "app/Validators/"
-        }
+            "Validators\\": "app/Validators/",
+            "Collect\\": "vendor/doker123/collect_array_methods/src/",
+            "MvcHelpers\\": "vendor/doker123/mvc_helpers/src/"
+        },
+        "files": [
+            "vendor/doker123/collect_array_methods/src/helpers.php",
+            "vendor/doker123/mvc_helpers/src/helpers.php"
+        ]
     }
 }

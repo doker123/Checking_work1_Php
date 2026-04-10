@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Src\Auth\IdentityInterface;
+use MvcHelpers\PasswordHasher;
+use MvcHelpers\NameFormatter;
 
 class Aspirant extends Model implements IdentityInterface
 {
@@ -32,12 +34,12 @@ class Aspirant extends Model implements IdentityInterface
     protected static function booted()
     {
         static::creating(function ($user) {
-            $user->password = password_hash($user->password, PASSWORD_BCRYPT);
+            $user->password = PasswordHasher::hash($user->password);
         });
 
         static::updating(function ($user) {
             if ($user->isDirty('password')) {
-                $user->password = password_hash($user->password, PASSWORD_BCRYPT);
+                $user->password = PasswordHasher::hash($user->password);
             }
         });
     }
@@ -56,7 +58,7 @@ class Aspirant extends Model implements IdentityInterface
     {
         $aspirant = self::where('login', $credentials['login'])->first();
 
-        if ($aspirant && password_verify($credentials['password'], $aspirant->password)) {
+        if ($aspirant && PasswordHasher::verify($credentials['password'], $aspirant->password)) {
             return $aspirant;
         }
 
@@ -70,7 +72,11 @@ class Aspirant extends Model implements IdentityInterface
 
     public function getDisplayName(): string
     {
-        return "{$this->last_name} {$this->name} {$this->patronum}";
+        return NameFormatter::fullName(
+            $this->last_name ?? '',
+            $this->name ?? '',
+            $this->patronum ?? ''
+        );
     }
 
     public function developmentTeams(): HasMany
@@ -90,6 +96,10 @@ class Aspirant extends Model implements IdentityInterface
 
     public function getFullNameAttribute(): string
     {
-        return "{$this->last_name} {$this->name} {$this->patronum}";
+        return NameFormatter::fullName(
+            $this->last_name ?? '',
+            $this->name ?? '',
+            $this->patronum ?? ''
+        );
     }
 }
