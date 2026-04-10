@@ -23,17 +23,51 @@ class Site
         }
 
         if (!hash_equals(Session::get('csrf_token') ?? '', $request->csrf_token ?? '')) {
-            return new View('site.signup', ['errors' => ['Неверный CSRF-токен']]);
+            $titles = AcademicTitle::all();
+            return new View('site.signup', ['errors' => ['Неверный CSRF-токен'], 'titles' => $titles]);
         }
 
-        $validator = new Validator($request->all(), [
+        $rules = [
             'user_type' => ['required'],
             'login' => ['required'],
             'password' => ['required'],
             'name' => ['required'],
-        ], [
-            'required' => 'Поле :field обязательно для заполнения',
-        ]);
+        ];
+
+        $validator = null;
+
+        // Добавляем правила в зависимости от роли
+        if ($request->user_type === 'director') {
+            $directorRules = [
+                'director_last_name' => ['required'],
+                'director_patronum' => ['required'],
+                'director_date_of_birth' => ['required'],
+                'director_gender' => ['required'],
+                'director_citizenship' => ['required'],
+            ];
+            $allRules = array_merge($rules, $directorRules);
+            $validator = new Validator($request->all(), $allRules, [
+                'required' => 'Поле :field обязательно для заполнения',
+            ]);
+        } elseif ($request->user_type === 'aspirant') {
+            $aspirantRules = [
+                'aspirant_last_name' => ['required'],
+                'aspirant_patronum' => ['required'],
+                'aspirant_date_of_birth' => ['required'],
+                'aspirant_gender' => ['required'],
+                'aspirant_citizenship' => ['required'],
+                'aspirant_identity_document' => ['required'],
+            ];
+            $allRules = array_merge($rules, $aspirantRules);
+            $validator = new Validator($request->all(), $allRules, [
+                'required' => 'Поле :field обязательно для заполнения',
+            ]);
+        } else {
+            // Для admin только базовые правила
+            $validator = new Validator($request->all(), $rules, [
+                'required' => 'Поле :field обязательно для заполнения',
+            ]);
+        }
 
         if ($validator->fails()) {
             $titles = AcademicTitle::all();
@@ -57,39 +91,38 @@ class Site
         }
 
         if (!empty($errors)) {
-            return new View('site.signup', ['errors' => $errors, 'data' => $request->all()]);
+            $titles = AcademicTitle::all();
+            return new View('site.signup', ['errors' => $errors, 'data' => $request->all(), 'titles' => $titles]);
         }
-
-        $hashedPassword = password_hash($request->password, PASSWORD_DEFAULT);
 
         match ($request->user_type) {
             'admin' => Admin::create([
                 'login' => $login,
-                'password' => $hashedPassword,
+                'password' => $request->password,
                 'name' => $request->name ?? 'Администратор',
             ]),
             'aspirant' => Aspirant::create([
                 'login' => $login,
-                'password' => $hashedPassword,
+                'password' => $request->password,
                 'name' => $request->name ?? '',
-                'patronum' => $request->patronum ?? '',
-                'last_name' => $request->last_name ?? '',
-                'date_of_birth' => $request->date_of_birth ?? date('Y-m-d'),
-                'gender' => $request->gender ?? 1,
-                'citizenship' => $request->citizenship ?? 'РФ',
-                'identity_document' => $request->identity_document ?? 'Паспорт',
+                'patronum' => $request->aspirant_patronum ?? '',
+                'last_name' => $request->aspirant_last_name ?? '',
+                'date_of_birth' => $request->aspirant_date_of_birth ?? date('Y-m-d'),
+                'gender' => $request->aspirant_gender ?? 1,
+                'citizenship' => $request->aspirant_citizenship ?? 'РФ',
+                'identity_document' => $request->aspirant_identity_document ?? 'Паспорт',
             ]),
             'director' => ScientificDirector::create([
                 'login' => $login,
-                'password' => $hashedPassword,
+                'password' => $request->password,
                 'name' => $request->name ?? '',
-                'patronum' => $request->patronum ?? '',
-                'last_name' => $request->last_name ?? '',
-                'date_of_birth' => $request->date_of_birth ?? date('Y-m-d'),
-                'gender' => $request->gender ?? 1,
-                'citizenship' => $request->citizenship ?? 'РФ',
-                'academic_degree' => $request->academic_degree ?? '',
-                'title_id' => $request->title_id ?: null,
+                'patronum' => $request->director_patronum ?? '',
+                'last_name' => $request->director_last_name ?? '',
+                'date_of_birth' => $request->director_date_of_birth ?? date('Y-m-d'),
+                'gender' => $request->director_gender ?? 1,
+                'citizenship' => $request->director_citizenship ?? 'РФ',
+                'academic_degree' => $request->director_academic_degree ?? '',
+                'title_id' => $request->director_title_id ?: null,
             ]),
             default => null,
         };
@@ -114,7 +147,7 @@ class Site
                 'admin' => app()->route->redirect('/admin/aspirants'),
                 'director' => app()->route->redirect('/admin/dissertations'),
                 'aspirant' => app()->route->redirect('/admin/publications'),
-                default => app()->route->redirect('site.post'),
+                default => app()->route->redirect('/'),
             };
             return '';
         }

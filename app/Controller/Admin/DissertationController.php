@@ -73,7 +73,7 @@ class DissertationController
         ]))->render();
     }
 
-    public function update(Request $request, $id): void
+    public function update($id, Request $request): void
     {
         $validator = new Validator($request->all(), [
             'theme' => ['required'],

@@ -120,4 +120,4 @@ Route::add('GET', '/report/search-aspirant', [Controller\Report\ReportController
 Route::add('POST', '/report/search-aspirant', [Controller\Report\ReportController::class, 'searchAspirant']);
 
 
-Route::add('GET', '/post', [Controller\Public\PublicationsController::class, 'post']);
+Route::add('GET', '/', [Controller\Public\PublicationsController::class, 'post']);

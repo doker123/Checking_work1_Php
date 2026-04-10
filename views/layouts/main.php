@@ -13,10 +13,10 @@
 <?php use Src\Auth\Auth; ?>
 <header class="header">
     <nav class="header-nav">
+        <a href="<?= app()->route->getUrl('/')?>">Главная</a>
         <?php if (Auth::check()): ?>
             <?php $userType = Auth::getUserType(); ?>
             <div class="nav-menu">
-                <a href="<?= app()->route->getUrl('/post')?>">Главная</a>
                 <?php if ($userType === 'admin'): ?>
                     <a href="<?= app()->route->getUrl('/admin/aspirants') ?>">Аспиранты</a>
                     <a href="<?= app()->route->getUrl('/admin/directors') ?>">Руководители</a>

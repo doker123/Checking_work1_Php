@@ -72,7 +72,7 @@ class DirectorController
         return (new View('admin.directors.edit', ['director' => $director, 'titles' => $titles]))->render();
     }
 
-    public function update(Request $request, $id): void
+    public function update($id, Request $request): void
     {
         $validator = new Validator($request->all(), [
             'last_name' => ['required'],

@@ -18,7 +18,7 @@ class RoleMiddleware
             $allowedRoles = explode(',', $roles);
             $userRole = Auth::getUserType();
             if (!in_array($userRole, $allowedRoles, true)) {
-                app()->route->redirect('/post');
+                app()->route->redirect('/');
                 exit;
             }
         }
