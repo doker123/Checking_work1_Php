@@ -20,7 +20,7 @@ class AcademicTitleController
         return (new View('admin.titles.create'))->render();
     }
 
-    public function store(Request $request): void
+    public function store(Request $request)
     {
         $validator = new Validator($request->all(), [
             'academic_title' => ['required'],
@@ -30,8 +30,10 @@ class AcademicTitleController
 
         if ($validator->fails()) {
             $errors = array_merge(...array_values($validator->errors()));
-            echo '<pre>' . htmlspecialchars(json_encode($errors, JSON_UNESCAPED_UNICODE)) . '</pre>';
-            return;
+            return (new View('admin.titles.create', [
+                'errors' => $errors,
+                'data' => $request->all(),
+            ]))->render();
         }
 
         AcademicTitle::create([
@@ -41,7 +43,7 @@ class AcademicTitleController
         app()->route->redirect('/admin/titles');
     }
 
-    public function update($id, Request $request): void
+    public function update($id, Request $request)
     {
         $validator = new Validator($request->all(), [
             'academic_title' => ['required'],
@@ -51,8 +53,12 @@ class AcademicTitleController
 
         if ($validator->fails()) {
             $errors = array_merge(...array_values($validator->errors()));
-            echo '<pre>' . htmlspecialchars(json_encode($errors, JSON_UNESCAPED_UNICODE)) . '</pre>';
-            return;
+            $title = AcademicTitle::find($id);
+            return (new View('admin.titles.edit', [
+                'errors' => $errors,
+                'data' => $request->all(),
+                'title' => $title,
+            ]))->render();
         }
 
         $title = AcademicTitle::find($id);

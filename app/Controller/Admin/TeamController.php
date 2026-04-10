@@ -24,7 +24,7 @@ class TeamController
         return (new View('admin.teams.create', ['directors' => $directors, 'aspirants' => $aspirants]))->render();
     }
 
-    public function store(Request $request): void
+    public function store(Request $request)
     {
         $validator = new Validator($request->all(), [
             'director_id' => ['required'],
@@ -35,8 +35,14 @@ class TeamController
 
         if ($validator->fails()) {
             $errors = array_merge(...array_values($validator->errors()));
-            echo '<pre>' . htmlspecialchars(json_encode($errors, JSON_UNESCAPED_UNICODE)) . '</pre>';
-            return;
+            $directors = ScientificDirector::all();
+            $aspirants = Aspirant::all();
+            return (new View('admin.teams.create', [
+                'errors' => $errors,
+                'data' => $request->all(),
+                'directors' => $directors,
+                'aspirants' => $aspirants,
+            ]))->render();
         }
 
         DevelopmentTeam::create([
@@ -65,7 +71,7 @@ class TeamController
         ]))->render();
     }
 
-    public function update($id, Request $request): void
+    public function update($id, Request $request)
     {
         $validator = new Validator($request->all(), [
             'director_id' => ['required'],
@@ -76,8 +82,16 @@ class TeamController
 
         if ($validator->fails()) {
             $errors = array_merge(...array_values($validator->errors()));
-            echo '<pre>' . htmlspecialchars(json_encode($errors, JSON_UNESCAPED_UNICODE)) . '</pre>';
-            return;
+            $team = DevelopmentTeam::find($id);
+            $directors = ScientificDirector::all();
+            $aspirants = Aspirant::all();
+            return (new View('admin.teams.edit', [
+                'errors' => $errors,
+                'data' => $request->all(),
+                'team' => $team,
+                'directors' => $directors,
+                'aspirants' => $aspirants,
+            ]))->render();
         }
 
         $team = DevelopmentTeam::find($id);

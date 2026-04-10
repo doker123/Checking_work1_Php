@@ -22,7 +22,7 @@ class PublicationController
         return (new View('admin.publications.create', ['teams' => $teams]))->render();
     }
 
-    public function store(Request $request): void
+    public function store(Request $request)
     {
         $validator = new Validator($request->all(), [
             'title' => ['required'],
@@ -35,8 +35,12 @@ class PublicationController
 
         if ($validator->fails()) {
             $errors = array_merge(...array_values($validator->errors()));
-            echo '<pre>' . htmlspecialchars(json_encode($errors, JSON_UNESCAPED_UNICODE)) . '</pre>';
-            return;
+            $teams = DevelopmentTeam::all();
+            return (new View('admin.publications.create', [
+                'errors' => $errors,
+                'data' => $request->all(),
+                'teams' => $teams,
+            ]))->render();
         }
 
         ScientificPublication::create([
@@ -63,7 +67,7 @@ class PublicationController
         return (new View('admin.publications.edit', ['publication' => $publication, 'teams' => $teams]))->render();
     }
 
-    public function update($id, Request $request): void
+    public function update($id, Request $request)
     {
         $validator = new Validator($request->all(), [
             'title' => ['required'],
@@ -76,8 +80,14 @@ class PublicationController
 
         if ($validator->fails()) {
             $errors = array_merge(...array_values($validator->errors()));
-            echo '<pre>' . htmlspecialchars(json_encode($errors, JSON_UNESCAPED_UNICODE)) . '</pre>';
-            return;
+            $publication = ScientificPublication::find($id);
+            $teams = DevelopmentTeam::all();
+            return (new View('admin.publications.edit', [
+                'errors' => $errors,
+                'data' => $request->all(),
+                'publication' => $publication,
+                'teams' => $teams,
+            ]))->render();
         }
 
         $publication = ScientificPublication::find($id);

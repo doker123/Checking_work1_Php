@@ -16,7 +16,7 @@
         <input type="hidden" name="csrf_token" value="<?= \Src\Auth\Auth::generateCSRF() ?>">
         <label>
             Роль
-            <select name="user_type" id="userType" required>
+            <select name="user_type" id="userType">
                 <option value="">— Выберите роль —</option>
                 <option value="admin" <?= ($data['user_type'] ?? '') === 'admin' ? 'selected' : '' ?>>Администратор</option>
                 <option value="director" <?= ($data['user_type'] ?? '') === 'director' ? 'selected' : '' ?>>Научный руководитель</option>
@@ -26,12 +26,12 @@
 
         <label>
             Логин
-            <input type="text" name="login" required value="<?= htmlspecialchars($data['login'] ?? '') ?>">
+            <input type="text" name="login" value="<?= htmlspecialchars($data['login'] ?? '') ?>">
         </label>
 
         <label>
             Пароль
-            <input type="password" name="password" required>
+            <input type="password" name="password">
         </label>
 
         <!-- Общие поля -->

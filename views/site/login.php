@@ -12,11 +12,11 @@
         <input type="hidden" name="csrf_token" value="<?= \Src\Auth\Auth::generateCSRF() ?>">
         <label>
             Логин
-            <input type="text" name="login" required placeholder="Введите логин">
+            <input type="text" name="login" placeholder="Введите логин">
         </label>
         <label>
             Пароль
-            <input type="password" name="password" required placeholder="Введите пароль">
+            <input type="password" name="password" placeholder="Введите пароль">
         </label>
         <button class="auth-btn" type="submit">Войти</button>
     </form>

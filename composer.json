@@ -21,7 +21,8 @@
             "Src\\": "core/Src/",
             "Model\\": "app/Model/",
             "Controller\\": "app/Controller/",
-            "Middleware\\": "app/Middleware/"
+            "Middleware\\": "app/Middleware/",
+            "Validators\\": "app/Validators/"
         }
     }
 }

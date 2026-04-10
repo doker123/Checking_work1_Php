@@ -28,6 +28,7 @@ class ReportController
             $errors = array_merge(...array_values($validator->errors()));
             return (new View('report.defend_form', [
                 'errors' => $errors,
+                'data' => $request->all(),
             ]))->render();
         }
 

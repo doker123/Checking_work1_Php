@@ -22,7 +22,7 @@ class DirectorController
         return (new View('admin.directors.create', ['titles' => $titles]))->render();
     }
 
-    public function store(Request $request): void
+    public function store(Request $request)
     {
         $validator = new Validator($request->all(), [
             'last_name' => ['required'],
@@ -39,8 +39,12 @@ class DirectorController
 
         if ($validator->fails()) {
             $errors = array_merge(...array_values($validator->errors()));
-            echo '<pre>' . htmlspecialchars(json_encode($errors, JSON_UNESCAPED_UNICODE)) . '</pre>';
-            return;
+            $titles = AcademicTitle::all();
+            return (new View('admin.directors.create', [
+                'errors' => $errors,
+                'data' => $request->all(),
+                'titles' => $titles,
+            ]))->render();
         }
 
         ScientificDirector::create([
@@ -72,7 +76,7 @@ class DirectorController
         return (new View('admin.directors.edit', ['director' => $director, 'titles' => $titles]))->render();
     }
 
-    public function update($id, Request $request): void
+    public function update($id, Request $request)
     {
         $validator = new Validator($request->all(), [
             'last_name' => ['required'],
@@ -88,8 +92,14 @@ class DirectorController
 
         if ($validator->fails()) {
             $errors = array_merge(...array_values($validator->errors()));
-            echo '<pre>' . htmlspecialchars(json_encode($errors, JSON_UNESCAPED_UNICODE)) . '</pre>';
-            return;
+            $director = ScientificDirector::find($id);
+            $titles = AcademicTitle::all();
+            return (new View('admin.directors.edit', [
+                'errors' => $errors,
+                'data' => $request->all(),
+                'director' => $director,
+                'titles' => $titles,
+            ]))->render();
         }
 
         $director = ScientificDirector::find($id);

@@ -161,6 +161,36 @@
     margin-top: 1rem;
 }
 
+.error-messages {
+    background: #fee2e2;
+    border: 1px solid #fca5a5;
+    border-radius: 6px;
+    padding: 1rem;
+    margin-bottom: 1.25rem;
+}
+
+.error-messages ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.error-messages li {
+    color: #dc2626;
+    padding: 0.4rem 0;
+    font-size: 14px;
+    border-bottom: 1px solid #fecaca;
+}
+
+.error-messages li:last-child {
+    border-bottom: none;
+}
+
+.error-messages li::before {
+    content: "⚠ ";
+    font-weight: bold;
+}
+
 @media (max-width: 768px) {
     .grid-list {
         grid-template-columns: 1fr;

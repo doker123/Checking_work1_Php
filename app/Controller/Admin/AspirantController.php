@@ -20,7 +20,7 @@ class AspirantController
         return (new View('admin.aspirants.create'))->render();
     }
 
-    public function store(Request $request): void
+    public function store(Request $request)
     {
         $validator = new Validator($request->all(), [
             'last_name' => ['required'],
@@ -41,8 +41,10 @@ class AspirantController
 
         if ($validator->fails()) {
             $errors = array_merge(...array_values($validator->errors()));
-            echo '<pre>' . htmlspecialchars(json_encode($errors, JSON_UNESCAPED_UNICODE)) . '</pre>';
-            return;
+            return (new View('admin.aspirants.create', [
+                'errors' => $errors,
+                'data' => $request->all(),
+            ]))->render();
         }
 
         Aspirant::create([
@@ -72,7 +74,7 @@ class AspirantController
         return (new View('admin.aspirants.edit', ['aspirant' => $aspirant]))->render();
     }
 
-    public function update($id, Request $request): void
+    public function update($id, Request $request)
     {
         $validator = new Validator($request->all(), [
             'last_name' => ['required'],
@@ -92,8 +94,12 @@ class AspirantController
 
         if ($validator->fails()) {
             $errors = array_merge(...array_values($validator->errors()));
-            echo '<pre>' . htmlspecialchars(json_encode($errors, JSON_UNESCAPED_UNICODE)) . '</pre>';
-            return;
+            $aspirant = Aspirant::find($id);
+            return (new View('admin.aspirants.edit', [
+                'aspirant' => $aspirant,
+                'errors' => $errors,
+                'data' => $request->all(),
+            ]))->render();
         }
 
         $aspirant = Aspirant::find($id);

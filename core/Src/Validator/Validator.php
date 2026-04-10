@@ -42,7 +42,7 @@ class Validator
                 $args,
                 $this->messages[$validatorName] ?? null
             );
-            if (!validator->rule()){
+            if (!$validator->rule()) {
                 $this->errors[$fieldName][] = $validator->validate();
             }
         }

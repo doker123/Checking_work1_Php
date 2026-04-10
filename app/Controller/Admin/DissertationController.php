@@ -24,7 +24,7 @@ class DissertationController
         return (new View('admin.dissertations.create', ['statuses' => $statuses, 'teams' => $teams]))->render();
     }
 
-    public function store(Request $request): void
+    public function store(Request $request)
     {
         $validator = new Validator($request->all(), [
             'theme' => ['required'],
@@ -40,8 +40,14 @@ class DissertationController
 
         if ($validator->fails()) {
             $errors = array_merge(...array_values($validator->errors()));
-            echo '<pre>' . htmlspecialchars(json_encode($errors, JSON_UNESCAPED_UNICODE)) . '</pre>';
-            return;
+            $statuses = StatusDissertation::all();
+            $teams = DevelopmentTeam::all();
+            return (new View('admin.dissertations.create', [
+                'errors' => $errors,
+                'data' => $request->all(),
+                'statuses' => $statuses,
+                'teams' => $teams,
+            ]))->render();
         }
 
         ScientificDissertation::create([
@@ -73,7 +79,7 @@ class DissertationController
         ]))->render();
     }
 
-    public function update($id, Request $request): void
+    public function update($id, Request $request)
     {
         $validator = new Validator($request->all(), [
             'theme' => ['required'],
@@ -89,8 +95,16 @@ class DissertationController
 
         if ($validator->fails()) {
             $errors = array_merge(...array_values($validator->errors()));
-            echo '<pre>' . htmlspecialchars(json_encode($errors, JSON_UNESCAPED_UNICODE)) . '</pre>';
-            return;
+            $dissertation = ScientificDissertation::find($id);
+            $statuses = StatusDissertation::all();
+            $teams = DevelopmentTeam::all();
+            return (new View('admin.dissertations.edit', [
+                'errors' => $errors,
+                'data' => $request->all(),
+                'dissertation' => $dissertation,
+                'statuses' => $statuses,
+                'teams' => $teams,
+            ]))->render();
         }
 
         $dissertation = ScientificDissertation::find($id);
