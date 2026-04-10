@@ -16,8 +16,7 @@
                 <span class="card-value"><?= $title->title_id ?></span>
             </div>
             <div class="card-actions">
-                <a class="btn btn-blue" href="<?= app()->route->getUrl('/admin/titles/' . $title->title_id) ?>">Просмотр</a>
-                <a class="btn btn-orange" href="<?= app()->route->getUrl('/admin/titles/' . $title->title_id . '/edit') ?>">Редактировать</a>
+
                 <a class="btn btn-red" href="<?= app()->route->getUrl('/admin/titles/' . $title->title_id . '/delete') ?>" onclick="return confirm('Удалить?')">Удалить</a>
             </div>
         </div>

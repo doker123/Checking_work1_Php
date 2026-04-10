@@ -17,8 +17,6 @@
                 <span class="card-value"><?= $status->status_id ?></span>
             </div>
             <div class="card-actions">
-                <a class="btn btn-blue" href="<?= app()->route->getUrl('/admin/statuses/' . $status->status_id) ?>">Просмотр</a>
-                <a class="btn btn-orange" href="<?= app()->route->getUrl('/admin/statuses/' . $status->status_id . '/edit') ?>">Редактировать</a>
                 <a class="btn btn-red" href="<?= app()->route->getUrl('/admin/statuses/' . $status->status_id . '/delete') ?>" onclick="return confirm('Удалить?')">Удалить</a>
             </div>
         </div>

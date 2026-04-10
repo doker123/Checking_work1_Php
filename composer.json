@@ -15,7 +15,8 @@
         "illuminate/database": "^10.38",
         "illuminate/events": "10.x-dev",
         "nikic/fast-route": "^2.0@dev",
-        "doker123/collect_array_methods": "@dev"
+        "doker123/collect_array_methods": "@dev",
+        "doker123/mvc_helpers": "dev-main"
     },
     "autoload": {
         "psr-4": {
