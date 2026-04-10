@@ -24,12 +24,10 @@
             "Controller\\": "app/Controller/",
             "Middleware\\": "app/Middleware/",
             "Validators\\": "app/Validators/",
-            "Collect\\": "vendor/doker123/collect_array_methods/src/",
             "MvcHelpers\\": "vendor/doker123/mvc_helpers/src/"
-        },
-        "files": [
-            "vendor/doker123/collect_array_methods/src/helpers.php",
-            "vendor/doker123/mvc_helpers/src/helpers.php"
-        ]
+        }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "11.5.x-dev"
     }
 }
