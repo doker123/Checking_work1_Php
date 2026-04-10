@@ -10,7 +10,7 @@
         <a class="btn btn-red" href="<?= app()->route->getUrl('/admin/directors/' . $director->director_id . '/delete') ?>" onclick="return confirm('Удалить?')">Удалить</a>
     </div>
     <div class="detail-row"><span class="detail-label">ID:</span> <?= $director->director_id ?></div>
-    <div class="detail-row"><span class="detail-label">ФИО:</span> <?= htmlspecialchars($director->lasr_name . ' ' . $director->name . ' ' . $director->patronum) ?></div>
+    <div class="detail-row"><span class="detail-label">ФИО:</span> <?= htmlspecialchars($director->last_name . ' ' . $director->name . ' ' . $director->patronum) ?></div>
     <div class="detail-row"><span class="detail-label">Дата рождения:</span> <?= $director->date_of_birth ?></div>
     <div class="detail-row"><span class="detail-label">Пол:</span> <?= $director->gender == 1 ? 'Мужской' : 'Женский' ?></div>
     <div class="detail-row"><span class="detail-label">Гражданство:</span> <?= htmlspecialchars($director->citizenship) ?></div>
