@@ -79,7 +79,6 @@ class ReportController
         $aspirants = collect();
 
         if (strlen($searchQuery) >= 2) {
-            // Используем утилиту из пакета mvc-helpers
             $foundAspirants = AspirantUtils::searchAspirantsByDirectorName($directors->all(), $searchQuery);
             $aspirants = collect($foundAspirants);
         }

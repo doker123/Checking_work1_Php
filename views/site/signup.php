@@ -34,7 +34,6 @@
             <input type="password" name="password">
         </label>
 
-        <!-- Общие поля -->
         <div id="commonFields">
             <label>
                 Имя
@@ -42,7 +41,6 @@
             </label>
         </div>
 
-        <!-- Поля для руководителя -->
         <div id="directorFields" class="role-section">
             <h4 style="margin-top:0;">Данные руководителя</h4>
             <div class="form-row">
@@ -83,7 +81,6 @@
             </label>
         </div>
 
-        <!-- Поля для аспиранта -->
         <div id="aspirantFields" class="role-section">
             <h4 style="margin-top:0;">Данные аспиранта</h4>
             <div class="form-row">

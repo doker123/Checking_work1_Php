@@ -11,7 +11,7 @@ class DateValidator extends AbstractValidator
     public function rule(): bool
     {
         if (empty($this->value)) {
-            return true; // Пустое значение пропускаем (для optional полей)
+            return true;
         }
         
         $d = \DateTime::createFromFormat('Y-m-d', $this->value);

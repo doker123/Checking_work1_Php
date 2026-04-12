@@ -36,7 +36,6 @@ class Site
 
         $validator = null;
 
-        // Добавляем правила в зависимости от роли
         if ($request->user_type === 'director') {
             $directorRules = [
                 'director_last_name' => ['required'],
@@ -63,7 +62,6 @@ class Site
                 'required' => 'Поле :field обязательно для заполнения',
             ]);
         } else {
-            // Для admin только базовые правила
             $validator = new Validator($request->all(), $rules, [
                 'required' => 'Поле :field обязательно для заполнения',
             ]);

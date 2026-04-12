@@ -19,8 +19,7 @@ class Auth
     {
         self::$user = $user;
         Session::set('user_id', $user->getId());
-        
-        // Сохраняем тип пользователя в сессии
+
         if (method_exists($user, 'getUserType')) {
             Session::set('user_type', $user->getUserType());
         }
