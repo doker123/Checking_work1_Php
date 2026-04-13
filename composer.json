@@ -25,7 +25,8 @@
             "Controller\\": "app/Controller/",
             "Middleware\\": "app/Middleware/",
             "Validators\\": "app/Validators/",
-            "MvcHelpers\\": "vendor/doker123/mvc_helpers/src/"
+            "MvcHelpers\\": "vendor/doker123/mvc_helpers/src/",
+            "Providers\\": "app/Providers/"
         }
     },
     "require-dev": {

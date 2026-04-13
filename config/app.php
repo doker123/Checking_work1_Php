@@ -15,10 +15,18 @@ return [
     'routeMiddleware' => [
         'auth' => \Middleware\AuthMiddleware::class,
         'role' => \Middleware\RoleMiddleware::class,
+        'api_auth' => \Middleware\ApiAuthMiddleware::class,
     ],
     'routeAppMiddleware' => [
         'trim'=> \Middleware\TrimMiddleware::class,
         'specialChars' => \Middleware\SpecialCharsMiddleware::class,
         'csrf' => \Middleware\CSRFMiddleware::class,
+        'json' => \Middleware\JSONMiddleware::class,
+    ],
+    'providers' => [
+        'kernel' => \Providers\KernelProvider::class,
+        'route' => \Providers\RouteProvider::class,
+        'db' => \Providers\DBProvider::class,
+        'auth' => \Providers\AuthProvider::class,
     ],
 ];
