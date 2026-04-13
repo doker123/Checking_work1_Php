@@ -5,7 +5,6 @@ use Src\Request;
 use Src\Session;
 use Src\View;
 use Src\Auth\Auth;
-use Src\Settings;
 use Controller\Report\ReportController;
 use Model\ScientificDirector;
 use Model\Aspirant;
@@ -33,15 +32,16 @@ class SearchAspirantTest extends TestCase
         }
 
         $_SERVER['DOCUMENT_ROOT'] = 'C:/Programs/xampp/htdocs';
+        $_SERVER['REQUEST_URI'] = '/';
         $_SERVER['REQUEST_METHOD'] = 'GET';
         $_POST = [];
         $_GET = [];
 
-        $GLOBALS['app'] = new \Src\Application(new Settings([
-            'app' => include __DIR__ . '/../config/app.php',
-            'db' => include __DIR__ . '/../config/db.php',
-            'path' => include __DIR__ . '/../config/path.php',
-        ]));
+        $config = include __DIR__ . '/../config/app.php';
+        $config['db'] = include __DIR__ . '/../config/db.php';
+        $config['path'] = include __DIR__ . '/../config/path.php';
+
+        $GLOBALS['app'] = new \Src\Application($config);
 
         if (!function_exists('app')) {
             function app() {

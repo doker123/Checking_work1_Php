@@ -120,7 +120,7 @@ class Site
                 'gender' => $request->director_gender ?? 1,
                 'citizenship' => $request->director_citizenship ?? 'РФ',
                 'academic_degree' => $request->director_academic_degree ?? '',
-                'title_id' => $request->director_title_id ?: null,
+                'title_id' => $request->director_title_id ?? null,
             ]),
             default => null,
         };

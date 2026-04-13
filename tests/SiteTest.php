@@ -5,7 +5,6 @@ use Src\Request;
 use Src\Session;
 use Src\View;
 use Src\Auth\Auth;
-use Src\Settings;
 use Controller\Site;
 use Model\Admin;
 use Model\Aspirant;
@@ -33,15 +32,16 @@ class SiteTest extends TestCase
         }
 
         $_SERVER['DOCUMENT_ROOT'] = 'C:/Programs/xampp/htdocs';
+        $_SERVER['REQUEST_URI'] = '/';
         $_SERVER['REQUEST_METHOD'] = 'GET';
         $_POST = [];
         $_GET = [];
 
-        $GLOBALS['app'] = new \Src\Application(new Settings([
-            'app' => include __DIR__ . '/../config/app.php',
-            'db' => include __DIR__ . '/../config/db.php',
-            'path' => include __DIR__ . '/../config/path.php',
-        ]));
+        $config = include __DIR__ . '/../config/app.php';
+        $config['db'] = include __DIR__ . '/../config/db.php';
+        $config['path'] = include __DIR__ . '/../config/path.php';
+
+        $GLOBALS['app'] = new \Src\Application($config);
 
         if (!function_exists('app')) {
             function app() {
@@ -224,11 +224,30 @@ class SiteTest extends TestCase
      */
     public function testSignupDirector(string $httpMethod, array $userData, string $expectedMessage): void
     {
+        // Создаём фиктивного директора для теста "занятый логин"
+        $title = \Model\AcademicTitle::first();
+        $titleId = $title ? $title->title_id : null;
+        $dummyDirector = ScientificDirector::where('login', 'dummy_login_is_busy')->first();
+        if (!$dummyDirector) {
+            ScientificDirector::create([
+                'login' => 'dummy_login_is_busy',
+                'password' => 'dummy123',
+                'name' => 'Dummy',
+                'patronum' => 'Dummy',
+                'last_name' => 'Dummy',
+                'date_of_birth' => '1980-01-01',
+                'gender' => 1,
+                'citizenship' => 'РФ',
+                'academic_degree' => 'к.т.н.',
+                'title_id' => $titleId,
+            ]);
+        }
+
         Auth::generateCSRF();
         $userData['csrf_token'] = $_SESSION['csrf_token'];
 
         if (($userData['login'] ?? '') === 'login_is_busy') {
-            $existingDirector = ScientificDirector::first();
+            $existingDirector = ScientificDirector::where('login', 'dummy_login_is_busy')->first();
             if ($existingDirector) {
                 $userData['login'] = $existingDirector->login;
             }
