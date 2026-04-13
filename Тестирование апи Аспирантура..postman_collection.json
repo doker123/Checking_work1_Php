@@ -1,0 +1,384 @@
+{
+	"info": {
+		"_postman_id": "41bee49a-74b0-46f4-a87f-c89f3cc89303",
+		"name": "Тестирование апи Аспирантура.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "49361996"
+	},
+	"item": [
+		{
+			"name": "Регистрация/Авторизация",
+			"item": [
+				{
+					"name": "Регистрация директора",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost/Checking_work1_Php/api/auth/register-director",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"Checking_work1_Php",
+								"api",
+								"auth",
+								"register-director"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Регистрация аспиранта",
+					"request": {
+						"auth": {
+							"type": "bearer"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"login\": \"ivanov_asp\",\r\n    \"password\": \"password123\",\r\n    \"name\": \"Иван\",\r\n    \"patronum\": \"Иванович\",\r\n    \"last_name\": \"Иванов\",\r\n    \"date_of_birth\": \"1995-03-15\",\r\n    \"gender\": \"1\",\r\n    \"citizenship\": \"РФ\",\r\n    \"identity_document\": \"Паспорт 4510 123456\"\r\n }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost/Checking_work1_Php/api/auth/register-aspirant",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"Checking_work1_Php",
+								"api",
+								"auth",
+								"register-aspirant"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Авторизация",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost/Checking_work1_Php/api/auth/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"Checking_work1_Php",
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Проверка токена",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost/Checking_work1_Php/api/auth/check",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"Checking_work1_Php",
+								"api",
+								"auth",
+								"check"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Разлогиниване пользователя",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost/Checking_work1_Php/api/auth/logout",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"Checking_work1_Php",
+								"api",
+								"auth",
+								"logout"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Публикации",
+			"item": [
+				{
+					"name": "Все публикации",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost/Checking_work1_Php/api/publications",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"Checking_work1_Php",
+								"api",
+								"publications"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Создание",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost/Checking_work1_Php/api/publications",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"Checking_work1_Php",
+								"api",
+								"publications"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Публикация",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost/Checking_work1_Php/api/publications/?id=1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"Checking_work1_Php",
+								"api",
+								"publications",
+								""
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Удаление",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost/Checking_work1_Php/api/publications/?id=2/delete",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"Checking_work1_Php",
+								"api",
+								"publications",
+								""
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "2/delete"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Обновление",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost/Checking_work1_Php/api/publications/?id=1/update",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"Checking_work1_Php",
+								"api",
+								"publications",
+								""
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "1/update"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Диссертации",
+			"item": [
+				{
+					"name": "Все диссертации",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost/Checking_work1_Php/api/dissertations",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"Checking_work1_Php",
+								"api",
+								"dissertations"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Создание",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost/Checking_work1_Php/api/dissertations",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"Checking_work1_Php",
+								"api",
+								"dissertations"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Диссертация",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost/Checking_work1_Php/api/dissertations/?id=1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"Checking_work1_Php",
+								"api",
+								"dissertations",
+								""
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Удаление",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost/Checking_work1_Php/api/dissertations/?id=2/delete",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"Checking_work1_Php",
+								"api",
+								"dissertations",
+								""
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "2/delete"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Обновление",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost/Checking_work1_Php/api/dissertations/?id=1/update",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"Checking_work1_Php",
+								"api",
+								"dissertations",
+								""
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "1/update"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
